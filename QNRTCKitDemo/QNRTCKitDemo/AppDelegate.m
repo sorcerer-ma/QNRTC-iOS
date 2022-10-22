@@ -25,6 +25,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+
     [Bugsnag startBugsnagWithApiKey:@"5c557cf459b88bd2726b2055530eac91"];
     
     // 测试 http 请求，先不删，搞懂了再删
@@ -37,6 +38,7 @@
 //        }
 //        NSLog(@"========= user auth token: %@", token);
 //    }];
+
     
     QRDLoginViewController *loginVC = [[QRDLoginViewController alloc] init];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:loginVC];
@@ -45,6 +47,8 @@
     [self.window makeKeyAndVisible];
     [Fabric with:@[[Crashlytics class]]];
     [QNRTC enableFileLogging];
+    
+    
     return YES;
 }
 
@@ -75,5 +79,14 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+// 测试唤醒
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    NSLog(@"%s",__func__);
+    NSLog(@"options: %@", options);
+    NSLog(@"URL scheme:%@", [url scheme]);
+    NSLog(@"URL query: %@", [url query]);
+    
+    return YES;
+}
 
 @end
