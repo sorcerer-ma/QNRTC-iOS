@@ -12,6 +12,8 @@
 #import <Crashlytics/Crashlytics.h>
 #import <QNRTCKit/QNRTCKit.h>
 
+#import "QRDNetworkUtil.h" // 测试用，先不删
+
 #import <Bugsnag.h>
 
 @interface AppDelegate () <UISplitViewControllerDelegate>
@@ -24,6 +26,17 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [Bugsnag startBugsnagWithApiKey:@"5c557cf459b88bd2726b2055530eac91"];
+    
+    // 测试 http 请求，先不删，搞懂了再删
+//    [QRDNetworkUtil requestUserAuth:(NSString *)@"111"
+//                              phone:(NSString *)@"12345"
+//                            smsCode:(NSString *)@"4321"
+//                    completeHandler:^(NSError *error, NSString *token){
+//        if (error) {
+//            NSLog(@"=========== error: %@", error);
+//        }
+//        NSLog(@"========= user auth token: %@", token);
+//    }];
     
     QRDLoginViewController *loginVC = [[QRDLoginViewController alloc] init];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:loginVC];
