@@ -193,7 +193,9 @@ UITextFieldDelegate
     // 1. roomName 房间名
     // 2. userId 用户名
     // 3. appId id标识（相同的房间、相同的用户名，不同的 appId 将无法进入同一个房间）
-    [QRDNetworkUtil requestTokenWithRoomName:self.roomName appId:self.appId userId:self.userId completionHandler:^(NSError *error, NSString *token) {
+    
+    [QRDNetworkUtil requestUserAuth2:self.userId
+                     completeHandler: ^(NSError *error, NSString *token) {
         
         [wself.view hideFullLoading];
         
@@ -207,6 +209,7 @@ UITextFieldDelegate
             
             wself.token = token;
             // 加入房间
+            NSLog(@"cesssssssssssssssssssssssssss %@", token);
             [wself joinRTCRoom];
         }
     }];
