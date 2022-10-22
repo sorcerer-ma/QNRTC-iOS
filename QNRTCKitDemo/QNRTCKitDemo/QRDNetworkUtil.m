@@ -10,6 +10,46 @@
 
 @implementation QRDNetworkUtil
 
+
+
++ (void)requestUserAuth2:(NSString *)title
+                
+        completeHandler:(void (^)(NSError *, NSString *))completionHandler {
+    
+    NSURL *requestUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://139.224.17.35:5080/v1/meeting"]];
+            
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:requestUrl];
+
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    request.HTTPMethod = @"POST";
+    request.timeoutInterval = 10;
+
+    NSDictionary *params = @{
+        @"title": title
+    };
+    NSData *paramsData= [NSJSONSerialization dataWithJSONObject:params options:NSJSONWritingPrettyPrinted error:nil];
+    
+    [request setHTTPBody:paramsData];
+    
+    NSURLSessionDataTask *retData = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completionHandler(error, nil);
+            });
+            return;
+        }
+        
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionHandler(nil, dic[@"rtc"][@"roomToken"]);
+        });
+    }];
+    [retData resume];
+}
+
+
+
 + (void)requestUserAuth:(NSString *)userId
                   phone:(NSString *)phone
                 smsCode:(NSString *)smsCode

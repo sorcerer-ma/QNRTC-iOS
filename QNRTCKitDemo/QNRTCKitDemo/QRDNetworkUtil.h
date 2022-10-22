@@ -14,6 +14,8 @@
                   phone:(NSString *)phone
                 smsCode:(NSString *)smsCode
         completeHandler:(void (^)(NSError *, NSString *))completionHandler;
++ (void)requestUserAuth2:(NSString *)title
+        completeHandler:(void (^)(NSError *, NSString *))completionHandler;
 
 + (void)requestTokenWithRoomName:(NSString *)roomName
                            appId:(NSString *)appId
