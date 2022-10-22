@@ -10,6 +10,11 @@
 
 @interface QRDNetworkUtil : NSObject
 
++ (void)requestUserAuth:(NSString *)userId
+                  phone:(NSString *)phone
+                smsCode:(NSString *)smsCode
+        completeHandler:(void (^)(NSError *, NSString *))completionHandler;
+
 + (void)requestTokenWithRoomName:(NSString *)roomName
                            appId:(NSString *)appId
                           userId:(NSString *)userId

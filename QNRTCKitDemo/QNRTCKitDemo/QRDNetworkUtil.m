@@ -10,6 +10,44 @@
 
 @implementation QRDNetworkUtil
 
++ (void)requestUserAuth:(NSString *)userId
+                  phone:(NSString *)phone
+                smsCode:(NSString *)smsCode
+        completeHandler:(void (^)(NSError *, NSString *))completionHandler {
+    
+    NSURL *requestUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://10.200.20.28:5080/v1/signUpOrIn"]];
+            
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:requestUrl];
+
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    request.HTTPMethod = @"POST";
+    request.timeoutInterval = 10;
+
+    NSDictionary *params = @{
+        @"phone": phone,
+        @"smsCode": smsCode
+    };
+    NSData *paramsData= [NSJSONSerialization dataWithJSONObject:params options:NSJSONWritingPrettyPrinted error:nil];
+    
+    [request setHTTPBody:paramsData];
+    
+    NSURLSessionDataTask *retData = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completionHandler(error, nil);
+            });
+            return;
+        }
+        
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionHandler(nil, dic[@"loginToken"]);
+        });
+    }];
+    [retData resume];
+}
+
 + (void)requestTokenWithRoomName:(NSString *)roomName
                            appId:(NSString *)appId
                           userId:(NSString *)userId
@@ -61,4 +99,5 @@
     }];
     [task resume];
 }
+
 @end
